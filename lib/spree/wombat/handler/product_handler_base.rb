@@ -15,6 +15,7 @@ module Spree
           @children_params = @params.delete(:variants)
           #posible master images
           @master_images = @params.delete(:images)
+          @master_images = []
           @taxon_ids = []
         end
 
@@ -99,7 +100,7 @@ module Spree
         end
 
         def process_images(variant, images)
-          return unless images.present?
+          return # unless images.present?
 
           images.each do |image_hsh|
             image = variant.images.create

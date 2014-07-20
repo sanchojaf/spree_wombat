@@ -8,7 +8,7 @@ module Spree
                  :available_on, :permalink, :meta_description, :meta_keywords,
                  :shipping_category, :taxons, :options
 
-      has_many :images, serializer: Spree::Wombat::ImageSerializer
+      #has_many :images, serializer: Spree::Wombat::ImageSerializer
       has_many :variants, serializer: Spree::Wombat::VariantSerializer
 
       def id

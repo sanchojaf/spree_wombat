@@ -5,10 +5,9 @@ module Spree
     # Accepts a Spree::StockItem and serializes this to the Hub Inventory format
     class UserSerializer < ActiveModel::Serializer
 
-      attributes :id, :email, :firstname, :lastname
+      attributes :id, :email, :firstname, :lastname, :roles
       has_one :shipping_address, serializer: Spree::Wombat::AddressSerializer
       has_one :billing_address, serializer: Spree::Wombat::AddressSerializer
-      has_many :spree_roles, serializer: Spree::Wombat::RoleSerializer  
       
       def id
         object.email
@@ -25,7 +24,10 @@ module Spree
       def lastname
         object.last_name if object.last_name.present?
       end
-
+      
+      def roles
+        object.spree_roles.pluck(:name)
+      end
     end
   end
 end

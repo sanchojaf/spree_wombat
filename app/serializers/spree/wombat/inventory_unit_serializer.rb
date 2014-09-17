@@ -10,7 +10,7 @@ module Spree
       end
 
       def price
-        object.line_item.price.round(2).to_f
+        object.line_item.price.round(2).to_f unless object.line_item.nil? 
       end
 
       def product_id

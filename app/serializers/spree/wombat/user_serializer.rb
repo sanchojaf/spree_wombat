@@ -8,6 +8,11 @@ module Spree
       attributes :id, :email, :firstname, :lastname
       has_one :shipping_address, serializer: Spree::Wombat::AddressSerializer
       has_one :billing_address, serializer: Spree::Wombat::AddressSerializer
+      has_many :roles, serializer: Spree::Wombat::RoleSerializer  
+      
+      def id
+        object.email
+      end
 
       def email
         object.email

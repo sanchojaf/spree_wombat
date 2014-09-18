@@ -16,8 +16,8 @@ module Spree
               :name => address_attributes[:state].capitalize }
           end
           
-          ensure_country_id_from_params address_attributes
-          ensure_state_id_from_params address_attributes
+          address_attributes = ensure_country_id_from_params(address_attributes)
+          address_attributes = ensure_state_id_from_params(address_attributes)
 
           address_attributes[:firstname] = firstname
           address_attributes[:lastname] = lastname
@@ -39,7 +39,7 @@ module Spree
         end
         
         
-        def self.ensure_country_id_from_params(address)
+        def ensure_country_id_from_params(address)
           return if address.nil? or address[:country_id].present? or address[:country].nil?
 
           begin
@@ -62,7 +62,7 @@ module Spree
           end
         end
 
-        def self.ensure_state_id_from_params(address)
+        def ensure_state_id_from_params(address)
           return if address.nil? or address[:state_id].present? or address[:state].nil?
 
           begin

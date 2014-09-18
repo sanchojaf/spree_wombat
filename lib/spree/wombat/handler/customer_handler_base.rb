@@ -16,9 +16,8 @@ module Spree
               'name' => address_attributes['state'].capitalize }
           end
           
-          address_attributes = ensure_country_id_from_params(address_attributes)
-          puts "****************** prepare_address address_attributes #{address_attributes}"
-          address_attributes = ensure_state_id_from_params(address_attributes)
+          address_attributes[:country_id] = ensure_country_id_from_params(address_attributes)
+          address_attributes[:state_id] = ensure_state_id_from_params(address_attributes)
 
           address_attributes[:firstname] = firstname
           address_attributes[:lastname] = lastname

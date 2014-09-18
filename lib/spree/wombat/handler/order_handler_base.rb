@@ -6,6 +6,12 @@ module Spree
         def self.order_params(order)
           order['number'] = order.delete('id')
 
+          stylist_email = order.delete('stylist')
+          stylist = Spree::User.find_by_email( stylist_email )
+          raise Exception.new("Can't find a Stylist with email #{stylist_email}!") unless stylist 
+          puts "**************************** stylist #{stylist.inspect}"
+          order['stylist_id'] = stylist.id
+
           shipping_address_hash = order.delete('shipping_address')
           billing_address_hash = order.delete('billing_address')
 
@@ -29,11 +35,6 @@ module Spree
           order['payments_attributes'] = payments_attributes
           order['completed_at'] = placed_on
           
-          stylist_email = order.delete('stylist')
-          stylist = Spree::User.find_by_email( stylist_email )
-          puts "**************************** stylist #{stylist.inspect}"
-          raise Exception.new("Can't find a Stylist with email #{stylist_email}!") unless stylist 
-          order['stylist_id'] = stylist.id
           
           order
         end

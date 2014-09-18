@@ -5,7 +5,7 @@ module Spree
     class OrderSerializer < ActiveModel::Serializer
 
       attributes :id, :status, :channel, :email, :currency, :placed_on, :updated_at, :totals,
-        :adjustments, :guest_token, :shipping_instructions
+        :adjustments, :guest_token, :shipping_instructions, :stylist
 
       has_many :line_items,  serializer: Spree::Wombat::LineItemSerializer
       has_many :payments, serializer: Spree::Wombat::PaymentSerializer
@@ -59,6 +59,11 @@ module Spree
           { name: 'shipping', value: shipping_total }
         ]
       end
+      
+      def stylist
+        object.stylist.email if object.stylist
+      end
+    
 
       private
 

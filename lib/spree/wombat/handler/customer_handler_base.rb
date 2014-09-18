@@ -4,6 +4,17 @@ module Spree
       class CustomerHandlerBase < Base
 
         def prepare_address(firstname, lastname, address_attributes)
+          
+          address_attributes['country'] = {
+            'iso' => address_attributes['country'].upcase }
+
+          if address_attributes['state'].length == 2
+            address_attributes['state'] = {
+              'abbr' => address_hash['state'].upcase }
+          else
+            address_attributes['state'] = {
+              'name' => address_attributes['state'].capitalize }
+          end
 
           country_iso = address_attributes.delete(:country)
           country = Spree::Country.find_by_iso(country_iso)

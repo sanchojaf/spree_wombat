@@ -9,8 +9,8 @@ module Spree
           user = Spree.user_class.where(email: email).first
           return response("Can't find customer with email '#{email}'", 500) unless user
 
-          firstname = payload["customer"]["firstname"]
-          lastname = payload["customer"]["lastname"]
+          firstname = @payload["customer"]["firstname"]
+          lastname = @payload["customer"]["lastname"]
 
           begin
 
@@ -29,6 +29,10 @@ module Spree
           rescue Exception => exception
             return response(exception.message, 500)
           end
+          
+          root_roles = @payload["customer"].delete(:roles)
+          process_roles(user, root_roles)
+          
           response "Updated customer with #{email} and ID: #{user.id}"
         end
 

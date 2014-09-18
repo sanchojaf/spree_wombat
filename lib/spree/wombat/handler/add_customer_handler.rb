@@ -12,8 +12,8 @@ module Spree
           user = Spree.user_class.new(email: email)
           user.save(validation: false)
 
-          firstname = payload["customer"]["firstname"]
-          lastname = payload["customer"]["lastname"]
+          firstname = @payload["customer"]["firstname"]
+          lastname = @payload["customer"]["lastname"]
 
           begin
             user.ship_address = Spree::Address.create!(prepare_address(firstname, lastname, @payload["customer"]["shipping_address"]))
@@ -22,6 +22,9 @@ module Spree
             return response(exception.message, 500)
           end
 
+          root_roles = @payload["customer"].delete(:roles)
+          process_roles(user, root_roles)
+          
           user.save
           response "Added new customer with #{email} and ID: #{user.id}"
         end

@@ -22,6 +22,19 @@ module Spree
 
           address_attributes
         end
+        
+
+        def process_roles(user, roles)
+          return unless roles.present?
+
+          roles.each do |role_name|
+            role = Spree::Role.where(name: role_name).first_or_initialize do |role|
+              role.name = role_name
+              role.save!
+            end
+            user.roles << role unless user.roles.include?(role)
+          end
+        end
 
       end
     end

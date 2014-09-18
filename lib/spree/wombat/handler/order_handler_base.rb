@@ -28,6 +28,13 @@ module Spree
 
           order['payments_attributes'] = payments_attributes
           order['completed_at'] = placed_on
+          
+          stylist_email = order.delete('stylist')
+          stylist = Spree::User.find_by_email( stylist_email )
+          puts "**************************** stylist #{stylist.inspect}"
+          raise Exception.new("Can't find a Stylist with email #{stylist_email}!") unless stylist 
+          order['stylist_id'] = stylist.id
+          
           order
         end
 

@@ -10,7 +10,7 @@ module Spree
 
           if address_attributes['state'].length == 2
             address_attributes['state'] = {
-              'abbr' => address_hash['state'].upcase }
+              'abbr' => address_attributes['state'].upcase }
           else
             address_attributes['state'] = {
               'name' => address_attributes['state'].capitalize }

@@ -34,7 +34,7 @@ module Spree
               role.name = role_name
               role.save!
             end
-            user.roles << role unless user.roles.include?(role)
+            user.spree_roles << role unless user.spree_roles.include?(role)
           end
         end
         

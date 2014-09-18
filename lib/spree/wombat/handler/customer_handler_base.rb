@@ -5,15 +5,15 @@ module Spree
 
         def prepare_address(firstname, lastname, address_attributes)
           
-          address_hash[:country] = {
-            :iso => address_hash[:country].upcase }
+          address_attributes[:country] = {
+            :iso => address_attributes[:country].upcase }
 
-          if address_hash[:state].length == 2
-            address_hash[:state] = {
-              :abbr => address_hash[:state].upcase }
+          if address_attributes[:state].length == 2
+            address_attributes[:state] = {
+              :abbr => address_attributes[:state].upcase }
           else
-            address_hash[:state] = {
-              :name => address_hash[:state].capitalize }
+            address_attributes[:state] = {
+              :name => address_attributes[:state].capitalize }
           end
           
           ensure_country_id_from_params address_attributes

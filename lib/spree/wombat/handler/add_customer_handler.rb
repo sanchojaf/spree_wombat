@@ -17,9 +17,13 @@ module Spree
 
           begin
             puts "****************** @payload['customer']['shipping_address'] #{@payload['customer']['shipping_address']}"
-            user.ship_address = Spree::Address.create!(prepare_address(firstname, lastname, @payload["customer"]["shipping_address"]))
+            ship_address_attributes = prepare_address(firstname, lastname, @payload["customer"]["shipping_address"])
+            puts "****************** ship_address_attributes #{ship_address_attributes}"
+            user.ship_address = Spree::Address.create!(shipping_address_attributes)
             puts "****************** @payload['customer']['billing_address] #{@payload['customer']['billing_address']}"
-            user.bill_address = Spree::Address.create!(prepare_address(firstname, lastname, @payload["customer"]["billing_address"]))
+            bill_address_attributes = prepare_address(firstname, lastname, @payload["customer"]["billing_address"])
+            puts "****************** bill_address_attributes #{bill_address_attributes}"
+            user.bill_address = Spree::Address.create!(bill_address_attributes)
             
           rescue Exception => exception
             return response(exception.message, 500)

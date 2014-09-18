@@ -17,6 +17,7 @@ module Spree
           end
           
           address_attributes = ensure_country_id_from_params(address_attributes)
+          puts "****************** prepare_address address_attributes #{address_attributes}"
           address_attributes = ensure_state_id_from_params(address_attributes)
 
           address_attributes[:firstname] = firstname

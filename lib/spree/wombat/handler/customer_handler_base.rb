@@ -5,15 +5,15 @@ module Spree
 
         def prepare_address(firstname, lastname, address_attributes)
           
-          address_attributes[:country] = {
-            :iso => address_attributes[:country].upcase }
+          address_attributes['country'] = {
+            'iso' => address_attributes['country'].upcase }
 
-          if address_attributes[:state].length == 2
-            address_attributes[:state] = {
-              :abbr => address_attributes[:state].upcase }
+          if address_attributes['state'].length == 2
+            address_attributes['state'] = {
+              'abbr' => address_hash['state'].upcase }
           else
-            address_attributes[:state] = {
-              :name => address_attributes[:state].capitalize }
+            address_attributes['state'] = {
+              'name' => address_attributes['state'].capitalize }
           end
           
           address_attributes = ensure_country_id_from_params(address_attributes)
@@ -44,13 +44,13 @@ module Spree
 
           begin
             search = {}
-            if name = address[:country][:name]
+            if name = address[:country]['name']
               search[:name] = name
-            elsif iso_name = address[:country][:iso_name]
+            elsif iso_name = address[:country]['iso_name']
               search[:iso_name] = iso_name.upcase
-            elsif iso = address[:country][:iso]
+            elsif iso = address[:country]['iso']
               search[:iso] = iso.upcase
-            elsif iso3 = address[:country][:iso3]
+            elsif iso3 = address[:country]['iso3']
               search[:iso3] = iso3.upcase
             end
 
@@ -67,9 +67,9 @@ module Spree
 
           begin
             search = {}
-            if name = address[:state][:name]
+            if name = address[:state]['name']
               search[:name] = name
-            elsif abbr = address[:state][:abbr]
+            elsif abbr = address[:state]['abbr']
               search[:abbr] = abbr.upcase
             end
 

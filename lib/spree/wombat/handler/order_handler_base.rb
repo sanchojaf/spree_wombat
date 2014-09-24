@@ -9,14 +9,24 @@ module Spree
           stylist_email = order.delete('stylist')
           stylist = Spree::User.find_by_email( stylist_email )
           raise Exception.new("Can't find a Stylist with email #{stylist_email}!") unless stylist 
-          puts "**************************** stylist #{stylist.inspect}"
           order['stylist_id'] = stylist.id
 
           shipping_address_hash = order.delete('shipping_address')
           billing_address_hash = order.delete('billing_address')
-
-          prepare_address(shipping_address_hash, 'ship_address_attributes')
-          prepare_address(billing_address_hash, 'bill_address_attributes')
+          
+          if ship_address = Spree::Adreess.find_by_number( shipping_address_hash.delete('id') )
+             order['shipping_address_id'] = ship_address.id
+          else
+             prepare_address(shipping_address_hash, 'ship_address_attributes')
+             order['ship_address_attributes'] = shipping_address_hash
+          end    
+          
+          if bill_address = Spree::Adreess.find_by_number( billing_address_hash.delete('id'))
+             order['billing_address_id'] = bill_address.id
+          else
+             prepare_address(billing_address_hash, 'bill_address_attributes')
+             order['bill_address_attributes'] = billing_address_hash
+          end   
 
           payments_attributes = order.fetch('payments', [])
           placed_on = order.delete('placed_on')
@@ -25,9 +35,6 @@ module Spree
           line_items_hash = rehash_line_items order['line_items']
 
           order = order.slice *Spree::Order.attribute_names
-
-          order['ship_address_attributes'] = shipping_address_hash
-          order['bill_address_attributes'] = billing_address_hash
 
           order['line_items_attributes'] = line_items_hash
           order['adjustments_attributes'] = adjustments_attributes_hash

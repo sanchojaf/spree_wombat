@@ -6,15 +6,18 @@ module Spree
         def process
 
           shipment_hsh = @payload[:shipment]
-
+          
           order_number = shipment_hsh.delete(:order_id)
           shipment_number = shipment_hsh.delete(:id)
 
           shipment = Spree::Shipment.find_by_number(shipment_number)
           return response("Can't find shipment #{shipment_number}", 500) unless shipment
-
-          address_attributes = shipment_hsh.delete(:shipping_address)
-          if address_attributes
+          
+          address_attributes = shipment.delete(:shipping_address)
+          if ship_address = Spree::Adreess.find_by_number( address_attributes.delete('id') )
+            address_attributes = { address_id: ship_address }
+          else
+            
             country_iso = address_attributes.delete(:country)
             country = Spree::Country.find_by_iso(country_iso)
             return response("Can't find a country with iso name #{country_iso}!", 500) unless country_iso
@@ -30,9 +33,7 @@ module Spree
                 address_attributes[:state_name] = state_name
               end
             end
-
-            shipment_hsh[:address_attributes] = address_attributes
-          end
+          end  
 
 
           target_state = shipment_hsh.delete(:status)

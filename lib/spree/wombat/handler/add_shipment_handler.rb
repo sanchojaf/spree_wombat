@@ -16,21 +16,28 @@ module Spree
           external_id = shipment.delete(:id)
 
           address_attributes = shipment.delete(:shipping_address)
-          country_iso = address_attributes.delete(:country)
-          country = Spree::Country.find_by_iso(country_iso)
-          return response("Can't find a country with iso name #{country_iso}!", 500) unless country_iso
-          address_attributes[:country_id] = country.id
+          if ship_address = Spree::Adreess.find_by_number( address_attributes.delete('id') )
+            address_attributes = { address_id: ship_address }
+          else
+            
+            country_iso = address_attributes.delete(:country)
+            country = Spree::Country.find_by_iso(country_iso)
+            return response("Can't find a country with iso name #{country_iso}!", 500) unless country_iso
+            address_attributes[:country_id] = country.id
 
-          state_name = address_attributes.delete(:state)
-          if state_name
-            state = Spree::State.find_by_name(state_name)
-            state = Spree::State.find_by_abbr(state_name) unless state
-            if state
-              address_attributes[:state_id] = state.id
-            else
-              address_attributes[:state_name] = state_name
+            state_name = address_attributes.delete(:state)
+            if state_name
+              state = Spree::State.find_by_name(state_name)
+              state = Spree::State.find_by_abbr(state_name) unless state
+              if state
+                address_attributes[:state_id] = state.id
+              else
+                address_attributes[:state_name] = state_name
+              end
             end
-          end
+          end  
+            
+          
 
           shipment[:state] = shipment.delete(:status)
           email = shipment.delete(:email)

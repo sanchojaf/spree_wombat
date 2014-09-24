@@ -16,11 +16,19 @@ module Spree
           lastname = @payload["customer"]["lastname"]
 
           begin
-            ship_address_attributes = prepare_address(firstname, lastname, @payload["customer"]["shipping_address"])
-            user.ship_address = Spree::Address.create!(ship_address_attributes)
-            bill_address_attributes = prepare_address(firstname, lastname, @payload["customer"]["billing_address"])
-            user.bill_address = Spree::Address.create!(bill_address_attributes)
+            if ship_address = Spree::Adreess.find_by_number( @payload["customer"]["shipping_address"].delete('id') )
+              user.ship_address = ship_address
+            else
+              ship_address_attributes = prepare_address(firstname, lastname, @payload["customer"]["shipping_address"])
+              user.ship_address = Spree::Address.create!(ship_address_attributes)
+            end
             
+            if bill_address = Spree::Adreess.find_by_number( @payload["customer"]["billing_address"].delete('id') )
+              user.bill_address = bill_address
+            else
+              bill_address_attributes = prepare_address(firstname, lastname, @payload["customer"]["billing_address"])
+              user.bill_address = Spree::Address.create!(bill_address_attributes)
+            end  
           rescue Exception => exception
             return response(exception.message, 500)
           end

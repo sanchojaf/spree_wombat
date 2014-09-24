@@ -4,7 +4,7 @@ module Spree
       class CustomerHandlerBase < Base
 
         def prepare_address(firstname, lastname, address_attributes)
-          
+
           address_attributes['country'] = {
             'iso' => address_attributes['country'].upcase }
 
@@ -15,7 +15,7 @@ module Spree
             address_attributes['state'] = {
               'name' => address_attributes['state'].capitalize }
           end
-          
+        
           address_attributes[:country_id] = ensure_country_id_from_params(address_attributes)
           address_attributes[:state_id] = ensure_state_id_from_params(address_attributes)
 
@@ -59,7 +59,7 @@ module Spree
             address[:country_id] = Spree::Country.where(search).first!.id
 
           rescue Exception => e
-            raise "Ensure order import address country: #{e.message} #{search}"
+            raise "Ensure order have well define address country: #{e.message} #{search}"
           end
         end
 
@@ -83,7 +83,7 @@ module Spree
               address[:state_name] = search[:name] || search[:abbr]
             end
           rescue Exception => e
-            raise "Ensure order import address state: #{e.message} #{search}"
+            raise "Ensure order have well define address state: #{e.message} #{search}"
           end
         end
         
